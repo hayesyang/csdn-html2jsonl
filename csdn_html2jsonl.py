@@ -31,6 +31,12 @@ def get_md5(text: str) -> str:
     return ''
 
 
+def is_security_check(content):
+    if 'the website you visited has security defense enabled' in content:
+        return True
+    return False
+
+
 def html_to_markdown(element, list_depth=0, ordered_counters=None) -> str:
     """
     递归将 HTML 元素（BeautifulSoup Tag/NavigableString）转换为 Markdown 文本。
@@ -366,6 +372,9 @@ def extract_content_from_html(html_path: str) -> tuple:
             continue
     else:
         print(f"[ERROR] 无法读取文件: {html_path}")
+        return None, None
+
+    if is_security_check(html_content):
         return None, None
 
     soup = BeautifulSoup(html_content, 'html.parser')
